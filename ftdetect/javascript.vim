@@ -13,7 +13,7 @@ endif
 
 " Whether the @weex pragma is required.
 if !exists('g:weex_pragma_required')
-  let g:weex_pragma_required = 0
+  let g:weex_pragma_required = 1
 endif
 
 if g:weex_pragma_required
@@ -30,7 +30,22 @@ fu! <SID>EnableWeex()
   return 1
 endfu
 
+" Syntax with many language
+fu! s:regSyntax()
+    " runtime! syntax/html.vim
+    " runtime! syntax/xml.vim
+    set syntax=weex
+    " runtime! syntax/weex.vim
+    " runtime! indent/weex.vim
+    " setf javascript.we
+    " setf css
+    " setf html
+    " setf xml
+endfu
+
+au Syntax we call s:regSyntax()
 autocmd BufNewFile,BufRead *.we let b:weex_ext_found = 1
-autocmd BufNewFile,BufRead *.we set filetype=javascript.we
+autocmd BufNewFile,BufRead *.we let ts=2
+autocmd BufNewFile,BufRead *.we call s:regSyntax()
 autocmd BufNewFile,BufRead *.js
   \ if <SID>EnableWeex() | set filetype=javascript.we | endif

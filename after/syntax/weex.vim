@@ -13,6 +13,7 @@
 runtime! syntax/html.vim
 runtime! syntax/css.vim
 runtime! syntax/css/*.vim
+runtime! syntax/javascript.vim
 
 " if !exists("s:syntaxes")
   " Search available syntax files.
@@ -67,11 +68,8 @@ if s:syntaxes.scss
   syntax region scss keepend start=/<style\( \+scoped\)\? lang=\("\|'\)[^\1]*scss[^\1]*\1\( \+scoped\)\?>/ end="</style>" contains=@scss fold
 endif
 
-if exists('s:current_syntax')
-  let b:current_syntax=s:current_syntax
-endif
 
-" Officially, vim-jsx depends on the pangloss/vim-javascript syntax package
+" Officially, vim-weex depends on the pangloss/vim-javascript syntax package
 " (and is tested against it exclusively).  However, in practice, we make some
 " effort towards compatibility with other packages.
 "
@@ -84,12 +82,12 @@ endif
 
 " Weex attributes should color as JS.  Note the trivial end pattern; we let
 " jsBlock take care of ending the region.
-syn region xmlString contained start=+{+ end=++ contains=html,css,jsBlock,javascriptBlock
+syn region xmlString contained start=+{+ end=++ contains=@HTML,@CSS,jsBlock,javascriptBlock
 
 " Weex child blocks behave just like weex attributes, except that (a) they are
 " syntactically distinct, and (b) they need the syn-extend argument, or else
 " nested XML end-tag patterns may end the outer weRegion.
-syn region weChild contained start=+{+ end=++ contains=html,css,jsBlock,javascriptBlock
+syn region weChild contained start=+{+ end=++ contains=@HTML,@CSS,jsBlock,javascriptBlock
   \ extend
 
 " Highlight weex regions as XML; recursively match.
@@ -98,13 +96,17 @@ syn region weChild contained start=+{+ end=++ contains=html,css,jsBlock,javascri
 " preceding it, to avoid conflicts with, respectively, the left shift operator
 " and generic Flow type annotations (http://flowtype.org/).
 syn region weRegion
-  \ contains=@Spell,@XMLSyntax,@HTML,css,scss,weRegion,weChild,jsBlock,javascriptBlock
+  \ contains=@Spell,@XMLSyntax,@HTML,@CSS,css,scss,weRegion,weChild,jsBlock,javascriptBlock
   \ start=+\%(<\|\w\)\@<!<\z([a-zA-Z][a-zA-Z0-9:\-.]*\)+
   \ skip=+<!--\_.\{-}-->+
   \ end=+</\z1\_\s\{-}>+
   \ end=+/>+
   \ keepend
   \ extend
+
+if exists('s:current_syntax')
+  let b:current_syntax=s:current_syntax
+endif
 
 " Add weRegion to the lowest-level JS syntax cluster.
 syn cluster jsExpression add=weRegion
