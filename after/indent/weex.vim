@@ -17,6 +17,9 @@ if exists('b:did_indent')
   unlet b:did_indent
 endif
 exe 'runtime! indent/xml.vim'
+exe 'runtime! indent/html.vim'
+exe 'runtime! indent/css.vim'
+exe 'runtime! indent/scss.vim'
 if exists('s:did_indent')
   let b:did_indent=s:did_indent
 endif
@@ -45,7 +48,7 @@ endfu
 
 " Check if a syntax attribute is XMLish.
 fu! SynAttrXMLish(synattr)
-  return a:synattr =~ "^xml" || a:synattr =~ "^jsx"
+  return a:synattr =~ "^xml" || a:synattr =~ "^weex"
 endfu
 
 " Check if a synstack is XMLish (i.e., has an XMLish last attribute).

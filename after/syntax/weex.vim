@@ -9,9 +9,14 @@
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-if !exists("s:syntaxes")
+" runtime
+runtime! syntax/html.vim
+runtime! syntax/css.vim
+runtime! syntax/css/*.vim
+
+" if !exists("s:syntaxes")
   " Search available syntax files.
-  function s:search_syntaxes(...)
+  function! s:search_syntaxes(...)
     let syntaxes = {}
     let names = a:000
     for name in names
@@ -28,8 +33,8 @@ if !exists("s:syntaxes")
     return syntaxes
   endfunction
 
-  let s:syntaxes = s:search_syntaxes('pug', 'slm', 'coffee', 'stylus', 'sass', 'scss', 'less')
-endif
+  let s:syntaxes = s:search_syntaxes('css', 'scss')
+" endif
 
 " Prologue; load in XML syntax.
 if exists('b:current_syntax')
@@ -40,27 +45,7 @@ syn include @XMLSyntax syntax/xml.vim
 
 
 syntax include @HTML syntax/html.vim
-if exists("b:current_syntax")
-  unlet b:current_syntax
-endif
 syntax region html keepend start=/^<template>/ end=/^<\/template>/ contains=@HTML fold
-
-if s:syntaxes.pug
-  syntax include @PUG syntax/pug.vim
-  if exists("b:current_syntax")
-    unlet b:current_syntax
-  endif
-  syntax region pug keepend start=/<template lang=\("\|'\)[^\1]*pug[^\1]*\1>/ end="</template>" contains=@PUG fold
-  syntax region pug keepend start=/<template lang=\("\|'\)[^\1]*jade[^\1]*\1>/ end="</template>" contains=@PUG fold
-endif
-
-if s:syntaxes.slm
-  syntax include @SLM syntax/slm.vim
-  if exists("b:current_syntax")
-    unlet b:current_syntax
-  endif
-  syntax region slm keepend start=/<template lang=\("\|'\)[^\1]*slm[^\1]*\1>/ end="</template>" contains=@SLM fold
-endif
 
 syntax include @JS syntax/javascript.vim
 if exists("b:current_syntax")
@@ -68,36 +53,11 @@ if exists("b:current_syntax")
 endif
 syntax region javascript keepend matchgroup=Delimiter start=/<script\( lang="babel"\)\?\( type="text\/babel"\)\?>/ end="</script>" contains=@JS fold
 
-if s:syntaxes.coffee
-  syntax include @COFFEE syntax/coffee.vim
-  if exists("b:current_syntax")
-    unlet b:current_syntax
-  endif
-  " Matchgroup seems to be necessary for coffee
-  syntax region coffee keepend matchgroup=Delimiter start="<script lang=\"coffee\">" end="</script>" contains=@COFFEE fold
-endif
-
 syntax include @CSS syntax/css.vim
 if exists("b:current_syntax")
   unlet b:current_syntax
 endif
 syntax region css keepend start=/<style\( \+scoped\)\?>/ end="</style>" contains=@CSS fold
-
-if s:syntaxes.stylus
-  syntax include @stylus syntax/stylus.vim
-  if exists("b:current_syntax")
-    unlet b:current_syntax
-  endif
-  syntax region stylus keepend start=/<style lang=\("\|'\)[^\1]*stylus[^\1]*\1\( \+scoped\)\?>/ end="</style>" contains=@stylus fold
-endif
-
-if s:syntaxes.sass
-  syntax include @sass syntax/sass.vim
-  if exists("b:current_syntax")
-    unlet b:current_syntax
-  endif
-  syntax region sass keepend start=/<style\( \+scoped\)\? lang=\("\|'\)[^\1]*sass[^\1]*\1\( \+scoped\)\?>/ end="</style>" contains=@sass fold
-endif
 
 if s:syntaxes.scss
   syntax include @scss syntax/scss.vim
@@ -105,14 +65,6 @@ if s:syntaxes.scss
     unlet b:current_syntax
   endif
   syntax region scss keepend start=/<style\( \+scoped\)\? lang=\("\|'\)[^\1]*scss[^\1]*\1\( \+scoped\)\?>/ end="</style>" contains=@scss fold
-endif
-
-if s:syntaxes.less
-  syntax include @less syntax/less.vim
-  if exists("b:current_syntax")
-    unlet b:current_syntax
-  endif
-  syntax region less keepend matchgroup=PreProc start=/<style\%( \+scoped\)\? lang=\("\|'\)[^\1]*less[^\1]*\1\%( \+scoped\)\?>/ end="</style>" contains=@less fold
 endif
 
 if exists('s:current_syntax')
@@ -132,12 +84,12 @@ endif
 
 " Weex attributes should color as JS.  Note the trivial end pattern; we let
 " jsBlock take care of ending the region.
-syn region xmlString contained start=+{+ end=++ contains=jsBlock,javascriptBlock
+syn region xmlString contained start=+{+ end=++ contains=html,css,jsBlock,javascriptBlock
 
 " Weex child blocks behave just like weex attributes, except that (a) they are
 " syntactically distinct, and (b) they need the syn-extend argument, or else
 " nested XML end-tag patterns may end the outer weRegion.
-syn region weChild contained start=+{+ end=++ contains=jsBlock,javascriptBlock
+syn region weChild contained start=+{+ end=++ contains=html,css,jsBlock,javascriptBlock
   \ extend
 
 " Highlight weex regions as XML; recursively match.
@@ -146,7 +98,7 @@ syn region weChild contained start=+{+ end=++ contains=jsBlock,javascriptBlock
 " preceding it, to avoid conflicts with, respectively, the left shift operator
 " and generic Flow type annotations (http://flowtype.org/).
 syn region weRegion
-  \ contains=@Spell,@XMLSyntax,weRegion,weChild,jsBlock,javascriptBlock
+  \ contains=@Spell,@XMLSyntax,@HTML,css,scss,weRegion,weChild,jsBlock,javascriptBlock
   \ start=+\%(<\|\w\)\@<!<\z([a-zA-Z][a-zA-Z0-9:\-.]*\)+
   \ skip=+<!--\_.\{-}-->+
   \ end=+</\z1\_\s\{-}>+
