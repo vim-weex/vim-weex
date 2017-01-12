@@ -51,13 +51,6 @@ files with the `.we` extension.  If you would like WEEX in `.js` files, add
 let g:weex_ext_required = 0
 ```
 
-to your .vimrc or somewhere in your include path.  If you wish to restrict JSX
-to files with the pre-v0.12 `@jsx React.DOM` pragma, add
-
-```viml
-let g:weex_pragma_required = 1
-```
-
 to your .vimrc or somewhere in your include path.
 
 Frequently Asked Questions
@@ -79,10 +72,6 @@ highlight start and end tags differently due to the system XML syntax defaults.
 - _Syntax highlighting seems to work, but breaks highlighting and indenting
   further down in the file.  What's wrong?_
 
-This often results from trying to enable XML folding in one's `~/.vimrc` (i.e.,
-via `let g:xml_syntax_folding = 1`).  vim-jsx does not support syntax folding,
-and is not tested with either JavaScript or XML folding enabled.
-
 Installation
 ------------
 
@@ -97,10 +86,9 @@ The recommended installation method is via [Pathogen][3].  Then simply execute
 
 ### Vundle
 
-You can also add vim-jsx using [Vundle][4]---just add the following lines to
+You can also add vim-weex using [Vundle][4]---just add the following lines to
 your `~/.vimrc`:
 
-    Plugin 'pangloss/vim-javascript'
     Plugin 'vim-weex/vim-weex'
 
 To install from within vim, use the commands below.
