@@ -34,10 +34,10 @@ endfu
 fu! s:regSyntax()
     " runtime! syntax/html.vim
     " runtime! syntax/xml.vim
+    setf javascript.we
     set syntax=weex
     " runtime! syntax/weex.vim
     " runtime! indent/weex.vim
-    " setf javascript.we
     " setf css
     " setf html
     " setf xml
