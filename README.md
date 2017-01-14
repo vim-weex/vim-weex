@@ -2,7 +2,7 @@ vim-weex
 =======
 
 Syntax highlighting and indenting for WEEX.  Weex is a JavaScript syntax
-transformer which translates inline XML document fragments into JavaScript
+transformer which translates inline HTML document fragments into JavaScript
 objects.  It was developed by Alibaba alongside [Weex][1].
 
 vim-weex is _not_ a JavaScript syntax package, so in order to use it, you will
@@ -15,7 +15,7 @@ effort to support other JavaScript syntax packages, including:
 - othree/yajs
 
 Notably, the system vim JavaScript syntax is _not_ supported, due to its
-over-simplicity.  However, the system XML syntax package is an implicit
+over-simplicity.  However, the system HTML syntax package is an implicit
 dependency.
 
 Troubleshooting
@@ -64,10 +64,10 @@ its most fundamental purpose, or (b) user error?
 
 - _Why are my end tags colored differently than my start tags?_
 
-vim-weex is basically the glue that holds JavaScript and XML syntax packages
-together in blissful harmony.  This means that any XML syntax defaults carry
-over to the XML portions of vim, and it's common for many colorschemes to
-highlight start and end tags differently due to the system XML syntax defaults.
+vim-weex is basically the glue that holds JavaScript and HTML syntax packages
+together in blissful harmony.  This means that any HTML syntax defaults carry
+over to the HTML portions of vim, and it's common for many colorschemes to
+highlight start and end tags differently due to the system HTML syntax defaults.
 
 - _Syntax highlighting seems to work, but breaks highlighting and indenting
   further down in the file.  What's wrong?_

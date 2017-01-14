@@ -33,14 +33,10 @@ endfu
 " Syntax with many language
 fu! s:regSyntax()
     " runtime! syntax/html.vim
-    " runtime! syntax/xml.vim
     setf weex
-    " runtime! indent/weex.vim
 endfu
 
 au Syntax we call s:regSyntax()
 autocmd BufNewFile,BufRead *.we let b:weex_ext_found = 1
 autocmd BufNewFile,BufRead *.we let ts=2
 autocmd BufNewFile,BufRead *.we call s:regSyntax()
-autocmd BufNewFile,BufRead *.js
-  \ if <SID>EnableWeex() | set filetype=javascript.we | endif

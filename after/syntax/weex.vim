@@ -47,30 +47,66 @@ syntax include @HTML syntax/html.vim
 if exists("b:current_syntax")
   unlet b:current_syntax
 endif
-syntax region html keepend start=/^<template>/ end=/^<\/template>/ contains=@HTML fold
+
+" From yuezk/weex.vim
+" Thanks yuezk
+" Merge since 20170114
+syntax region template matchgroup=weexTag keepend start=/^<template.\{-}>/ end=/^<\/template>/ contains=@HTML fold
+" {{}} syntax
+syntax region weexNormalInside matchgroup=weexSpecialKey start=/\({\)\@<!{{\([{!%]\)\@!\~\?/ end=/\~\?\([%}]\)\@<!}}\(}\)\@!/ containedin=template,htmlString
+" 操作符
+syn match weexOperators '[-+*/=.><%,]' contained containedin=weexNormalInside
 
 syntax include @JS syntax/javascript.vim
 if exists("b:current_syntax")
   unlet b:current_syntax
 endif
-syntax region javascript keepend matchgroup=Delimiter start=/<script\( lang="babel"\)\?\( type="text\/babel"\)\?>/ end="</script>" contains=@JS fold
+" Statement Keywords
+syntax keyword jsImport                       import export require module exports global process __dirname __filename
+
+syntax keyword jsStorageClass   const var let const
+syntax keyword jsReturn return with exports
+syntax keyword jsPrototype      prototype toString toLocaleString toValue toFixed \$broadcast \$dispatch \$on \$off data init created compiled ready methods
+syntax keyword jsStatement      return with exports
+syntax keyword jsGlobalObjects  Array Boolean Date Function Math Number Object RegExp String
+syntax keyword jsExceptions     try catch throw finally Error EvalError RangeError ReferenceError SyntaxError TypeError URIError
+
+syntax cluster jsExpression  contains=jsBracket,jsParen,jsObject,jsBlock,jsTernaryIf,jsTaggedTemplate,jsTemplateString,jsString,jsRegexpString,jsNumber,jsFloat,jsOperator,jsBooleanTrue,jsBooleanFalse,jsNull,jsFunction,jsArrowFunction,jsGlobalObjects,jsExceptions,jsFutureKeys,jsDomErrNo,jsDomNodeConsts,jsHtmlEvents,jsFuncCall,jsUndefined,jsNan,jsPrototype,jsBuiltins,jsNoise,jsClassDefinition,jsArrowFunction,jsArrowFuncArgs,jsParensError,jsComment,jsArguments,jsThis,jsSuper,jsDo
+
+syntax region javascript keepend matchgroup=weexTag start=/<script\( lang="babel"\)\?\( type="text\/babel"\)\?>/ end="</script>" contains=@JS,@jsAll,@jsExpression fold
 
 syntax include @CSS syntax/css.vim
 if exists("b:current_syntax")
   unlet b:current_syntax
 endif
-syntax region css keepend start=/<style\( \+scoped\)\?>/ end="</style>" contains=@CSS fold
+syntax region css keepend matchgroup=weexTag start=/<style\( \+scoped\)\?>/ end="</style>" contains=@CSS fold
 
 if s:syntaxes.scss
   syntax include @scss syntax/scss.vim
   if exists("b:current_syntax")
     unlet b:current_syntax
   endif
-  syntax region scss keepend start=/<style\( \+scoped\)\? lang=\("\|'\)[^\1]*scss[^\1]*\1\( \+scoped\)\?>/ end="</style>" contains=@scss fold
+  syntax region scss keepend matchgroup=weexTag start=/<style\( \+scoped\)\? lang=\("\|'\)[^\1]*scss[^\1]*\1\( \+scoped\)\?>/ end="</style>" contains=@scss fold
 endif
+
+
+" From yuezk/weex.vim
+" Thanks yuezk
+" Merge since 20170114
+command! -nargs=+ WeexHiLink hi def link <args>
+
+" template script style 标签高亮
+WeexHiLink weexTag Keyword
+" 大括号部分高亮
+" {{ }}
+WeexHiLink weexSpecialKey Special
+" 操作符高亮
+WeexHiLink weexOperators Operator
+WeexHiLink jsWeexDef Operator
 
 " if exists('s:current_syntax')
 "   let b:current_syntax=s:current_syntax
 " endif
 
+delcommand WeexHiLink
 let b:current_syntax = "weex"
